@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escola NEI Paulistinha - Portal Mágico e Acessível</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts - Fredoka & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for kids icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        fredoka: ['Fredoka', 'sans-serif'],
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        sunYellow: '#FFD166',
+                        skyBlue: '#4EA8DE',
+                        mintGreen: '#06D6A0',
+                        candyPink: '#FF6B6B',
+                        purpleMagic: '#9B5DE5',
+                        darkText: '#2B2D42',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .font-fun { font-family: 'Fredoka', sans-serif; }
+        /* Accessibility High Contrast Focus */
+        :focus-visible { outline: 4px solid #FF6B6B; outline-offset: 4px; }
+        .fun-shadow { box-shadow: 0 8px 0 rgba(0,0,0,0.15); transition: all 0.1s ease; }
+        .fun-shadow:hover { transform: translateY(-2px); box-shadow: 0 10px 0 rgba(0,0,0,0.2); }
+        .fun-shadow:active { transform: translateY(4px); box-shadow: 0 4px 0 rgba(0,0,0,0.2); }
+    </style>
+</head>
+<body class="bg-skyBlue/10 text-darkText selection:bg-sunYellow selection:text-darkText">
+
+    <!-- Accessibility Control Bar -->
+    <div aria-label="Barra de Acessibilidade" class="bg-purpleMagic text-white py-2 px-4 shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3 text-sm font-semibold">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-universal-access text-xl text-sunYellow animate-pulse"></i>
+                <span>Acessibilidade:</span>
+            </div>
+            <div class="flex flex-wrap items-center gap-2">
+                <button onclick="toggleHighContrast()" class="bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 cursor-pointer">
+                    <i class="fa-solid fa-circle-half-stroke"></i> Alto Contraste
+                </button>
+                <button onclick="changeFontSize(1)" class="bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-xl transition flex items-center gap-1 cursor-pointer" aria-label="Aumentar Fonte">
+                    <i class="fa-solid fa-font"></i> <i class="fa-solid fa-plus text-xs"></i>
+                </button>
+                <button onclick="changeFontSize(-1)" class="bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-xl transition flex items-center gap-1 cursor-pointer" aria-label="Diminuir Fonte">
+                    <i class="fa-solid fa-font"></i> <i class="fa-solid fa-minus text-xs"></i>
+                </button>
+                <button onclick="speakWelcome()" class="bg-sunYellow text-darkText px-3 py-1.5 rounded-xl hover:bg-yellow-400 transition flex items-center gap-1.5 cursor-pointer font-bold">
+                    <i class="fa-solid fa-volume-high"></i> Ouvir Boas-Vindas
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header & Navigation -->
+    <header class="bg-white shadow-lg sticky top-[48px] z-40 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-candyPink rounded-2xl flex items-center justify-center text-white text-2xl fun-shadow">
+                    <i class="fa-solid fa-child-reaching"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold font-fun text-purpleMagic">NEI Paulistinha</h1>
+                    <p class="text-xs text-gray-500 font-medium">Escola Infantil Criativa & Inclusiva</p>
+                </div>
+            </div>
+            <nav class="hidden md:flex items-center gap-6 font-fun text-lg">
+                <a href="#inicio" class="text-darkText hover:text-candyPink transition">Início</a>
+                <a href="#cardapio" class="text-darkText hover:text-mintGreen transition">Cardápio 🍎</a>
+                <a href="#calendario" class="text-darkText hover:text-skyBlue transition">Calendário 📅</a>
+                <a href="#avisos" class="text-darkText hover:text-purpleMagic transition">Avisos 📢</a>
+                <a href="#jogos" class="bg-sunYellow text-darkText px-4 py-2 rounded-2xl fun-shadow hover:bg-yellow-400 transition"><i class="fa-solid fa-gamepad"></i> Mini-Jogos</a>
+            </nav>
+            <div class="flex items-center gap-2 md:hidden">
+                <button onclick="toggleMobileMenu()" class="p-2 text-2xl text-purpleMagic" aria-label="Abrir Menu">
+                    <i class="fa-solid fa-bars" id="menuIcon"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Navigation Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-gray-100 p-4 flex flex-col gap-3 font-fun text-lg shadow-xl">
+            <a href="#inicio" onclick="toggleMobileMenu()" class="p-2 hover:bg-skyBlue/10 rounded-xl">Início</a>
+            <a href="#cardapio" onclick="toggleMobileMenu()" class="p-2 hover:bg-mintGreen/10 rounded-xl">Cardápio 🍎</a>
+            <a href="#calendario" onclick="toggleMobileMenu()" class="p-2 hover:bg-skyBlue/10 rounded-xl">Calendário 📅</a>
+            <a href="#avisos" onclick="toggleMobileMenu()" class="p-2 hover:bg-purpleMagic/10 rounded-xl">Avisos 📢</a>
+            <a href="#jogos" onclick="toggleMobileMenu()" class="p-2 bg-sunYellow text-darkText rounded-xl text-center font-bold">Mini-Jogos 🎮</a>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+
+        <!-- Hero Section -->
+        <section id="inicio" class="bg-gradient-to-r from-skyBlue via-purpleMagic to-candyPink rounded-3xl p-8 sm:p-12 text-white shadow-2xl relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 opacity-20 text-9xl pointer-events-none">
+                <i class="fa-solid fa-shapes"></i>
+            </div>
+            <div class="max-w-2xl space-y-6 relative z-10">
+                <span class="bg-white/20 px-4 py-1.5 rounded-full text-sm font-bold uppercase tracking-wider backdrop-blur-sm">
+                    ✨ Bem-vindos ao Nosso Novo Portal!
+                </span>
+                <h2 class="text-4xl sm:text-6xl font-extrabold font-fun leading-tight">
+                    Aprender, Brigar e Crescer com Alegria!
+                </h2>
+                <p class="text-lg sm:text-xl text-white/90">
+                    Um espaço seguro, divertido e totalmente acessível feito com muito carinho para as nossas crianças, pais e professores.
+                </p>
+                <div class="flex flex-wrap gap-4 pt-2">
+                    <a href="#jogos" class="bg-sunYellow text-darkText font-bold font-fun px-6 py-3.5 rounded-2xl fun-shadow hover:bg-yellow-400 transition flex items-center gap-2 text-lg">
+                        <i class="fa-solid fa-gamepad text-xl"></i> Jogar Agora
+                    </a>
+                    <a href="#cardapio" class="bg-white text-purpleMagic font-bold font-fun px-6 py-3.5 rounded-2xl fun-shadow hover:bg-gray-100 transition flex items-center gap-2 text-lg">
+                        <i class="fa-solid fa-utensils text-xl"></i> Ver Cardápio
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Important Notices -->
+        <section id="avisos" class="space-y-6">
+            <div class="flex items-center justify-between">
+                <h3 class="text-3xl font-extrabold font-fun text-purpleMagic flex items-center gap-3">
+                    <i class="fa-solid fa-bullhorn text-candyPink"></i> Avisos Importantes
+                </h3>
+                <span class="text-sm font-semibold text-gray-500 bg-white px-3 py-1 rounded-full shadow-sm">Atualizado Semanalmente</span>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Notice 1 -->
+                <div class="bg-white p-6 rounded-3xl shadow-lg border-t-8 border-candyPink space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="bg-candyPink/10 text-candyPink px-3 py-1 rounded-full text-xs font-bold">Festa</span>
+                        <span class="text-xs text-gray-400"><i class="fa-regular fa-calendar"></i> 25/08</span>
+                    </div>
+                    <h4 class="text-xl font-bold font-fun text-darkText">Festa da Primavera & Cores</h4>
+                    <p class="text-gray-600 text-sm">Venham vestidos com roupas coloridas e tragam muita alegria para a nossa celebração da estação das flores!</p>
+                </div>
+                <!-- Notice 2 -->
+                <div class="bg-white p-6 rounded-3xl shadow-lg border-t-8 border-sunYellow space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-bold">Saúde</span>
+                        <span class="text-xs text-gray-400"><i class="fa-regular fa-calendar"></i> 28/08</span>
+                    </div>
+                    <h4 class="text-xl font-bold font-fun text-darkText">Campanha de Vacinação Infantil</h4>
+                    <p class="text-gray-600 text-sm">Atualização da caderneta de vacinação na salinha de enfermagem com equipe especializada e carinhosa.</p>
+                </div>
+                <!-- Notice 3 -->
+                <div class="bg-white p-6 rounded-3xl shadow-lg border-t-8 border-mintGreen space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold">Passeio</span>
+                        <span class="text-xs text-gray-400"><i class="fa-regular fa-calendar"></i> 05/09</span>
+                    </div>
+                    <h4 class="text-xl font-bold font-fun text-darkText">Passeio ao Parque Ecológico</h4>
+                    <p class="text-gray-600 text-sm">Dia de piquenique e observação dos animais na natureza. Autorizações já disponíveis na agenda escolar!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- School Lunch Menu -->
+        <section id="cardapio" class="bg-white rounded-3xl p-8 shadow-xl space-y-8 border-2 border-mintGreen/30">
+            <div class="text-center max-w-xl mx-auto space-y-2">
+                <span class="text-mintGreen font-bold uppercase tracking-wider text-sm bg-mintGreen/10 px-4 py-1 rounded-full">Nutrição & Sabor</span>
+                <h3 class="text-3xl sm:text-4xl font-extrabold font-fun text-darkText">Cardápio da Semana 🍎</h3>
+                <p class="text-gray-600">Alimentação saudável, colorida e equilibrada preparada com muito amor pelas nossas merendeiras.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <!-- Segunda -->
+                <div class="bg-skyBlue/10 p-5 rounded-2xl border-2 border-skyBlue/30 space-y-3 text-center">
+                    <h4 class="font-fun font-bold text-lg text-skyBlue">Segunda-Feira</h4>
+                    <div class="text-3xl">🍲</div>
+                    <p class="text-sm font-semibold text-darkText">Arroz, feijão carinhoso, frango desfiado e purê de batata.</p>
+                    <span class="inline-block bg-white px-3 py-1 rounded-full text-xs font-bold text-gray-500">Lanche: Banana</span>
+                </div>
+                <!-- Terça -->
+                <div class="bg-mintGreen/10 p-5 rounded-2xl border-2 border-mintGreen/30 space-y-3 text-center">
+                    <h4 class="font-fun font-bold text-lg text-mintGreen">Terça-Feira</h4>
+                    <div class="text-3xl">🍝</div>
+                    <p class="text-sm font-semibold text-darkText">Macarrão à bolonhesa com cenoura ralada e ervilhas.</p>
+                    <span class="inline-block bg-white px-3 py-1 rounded-full text-xs font-bold text-gray-500">Lanche: Melancia</span>
+                </div>
+                <!-- Quarta -->
+                <div class="bg-sunYellow/20 p-5 rounded-2xl border-2 border-sunYellow/50 space-y-3 text-center">
+                    <h4 class="font-fun font-bold text-lg text-amber-600">Quarta-Feira</h4>
+                    <div class="text-3xl">🥘</div>
+                    <p class="text-sm font-semibold text-darkText">Arroz colorido, carne moída com legumes e sopa de milho.</p>
+                    <span class="inline-block bg-white px-3 py-1 rounded-full text-xs font-bold text-gray-500">Lanche: Maçã</span>
+                </div>
+                <!-- Quinta -->
+                <div class="bg-candyPink/10 p-5 rounded-2xl border-2 border-candyPink/30 space-y-3 text-center">
+                    <h4 class="font-fun font-bold text-lg text-candyPink">Quinta-Feira</h4>
+                    <div class="text-3xl">🥪</div>
+                    <p class="text-sm font-semibold text-darkText">Sopa nutritiva de legumes com frango e pãozinho caseiro.</p>
+                    <span class="inline-block bg-white px-3 py-1 rounded-full text-xs font-bold text-gray-500">Lanche: Mamão</span>
+                </div>
+                <!-- Sexta -->
+                <div class="bg-purpleMagic/10 p-5 rounded-2xl border-2 border-purpleMagic/30 space-y-3 text-center">
+                    <h4 class="font-fun font-bold text-lg text-purpleMagic">Sexta-Feira</h4>
+                    <div class="text-3xl">🐟</div>
+                    <p class="text-sm font-semibold text-darkText">Arroz, feijão, bolinho de peixe assado e salada de tomate.</p>
+                    <span class="inline-block bg-white px-3 py-1 rounded-full text-xs font-bold text-gray-500">Lanche: Vitamina</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- School Calendar -->
+        <section id="calendario" class="space-y-6">
+            <div class="flex items-center justify-between">
+                <h3 class="text-3xl font-extrabold font-fun text-purpleMagic flex items-center gap-3">
+                    <i class="fa-solid fa-calendar-days text-skyBlue"></i> Calendário Escolar Interativo
+                </h3>
+                <span class="text-sm font-medium text-gray-600">Mês: <strong class="text-purpleMagic">Agosto / Setembro 2026</strong></span>
+            </div>
+            
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-xl grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Calendar grid simulation -->
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="grid grid-cols-7 gap-2 text-center font-fun font-bold text-gray-400 text-sm">
+                        <div>DOM</div><div>SEG</div><div>TER</div><div>QUA</div><div>QUI</div><div>SEX</div><div>SÁB</div>
+                    </div>
+                    <div class="grid grid-cols-7 gap-2 text-center font-medium">
+                        <div class="p-3 text-gray-300">26</div><div class="p-3 text-gray-300">27</div><div class="p-3 text-gray-300">28</div><div class="p-3 text-gray-300">29</div><div class="p-3 text-gray-300">30</div><div class="p-3 text-gray-300">31</div><div class="p-3 bg-skyBlue/10 rounded-xl">1</div>
+                        <div class="p-3 bg-skyBlue/10 rounded-xl">2</div><div class="p-3 bg-skyBlue/10 rounded-xl font-bold text-skyBlue">3 <span class="block text-[10px]">Início Mês</span></div><div class="p-3">4</div><div class="p-3">5</div><div class="p-3">6</div><div class="p-3 bg-candyPink/20 rounded-xl font-bold text-candyPink">7 <span class="block text-[10px]">Feriado</span></div><div class="p-3">8</div>
+                        <div class="p-3">9</div><div class="p-3">10</div><div class="p-3">11</div><div class="p-3 bg-sunYellow/30 rounded-xl font-bold text-amber-600">12 <span class="block text-[10px]">Teatro</span></div><div class="p-3">13</div><div class="p-3">14</div><div class="p-3">15</div>
+                        <div class="p-3">16</div><div class="p-3">17</div><div class="p-3 bg-mintGreen/30 rounded-xl font-bold text-mintGreen">18 <span class="block text-[10px]">Hoje!</span></div><div class="p-3">19</div><div class="p-3">20</div><div class="p-3">21</div><div class="p-3">22</div>
+                        <div class="p-3">23</div><div class="p-3">24</div><div class="p-3 bg-candyPink/20 rounded-xl font-bold text-candyPink">25 <span class="block text-[10px]">Festa</span></div><div class="p-3">26</div><div class="p-3">27</div><div class="p-3">28</div><div class="p-3">29</div>
+                    </div>
+                </div>
+                <!-- Event highlights -->
+                <div class="bg-skyBlue/10 rounded-2xl p-6 flex flex-col justify-between space-y-4">
+                    <div class="space-y-4">
+                        <h4 class="font-fun font-bold text-xl text-purpleMagic flex items-center gap-2">
+                            <i class="fa-solid fa-star text-sunYellow"></i> Próximo Evento
+                        </h4>
+                        <div class="bg-white p-4 rounded-2xl shadow-sm space-y-2">
+                            <span class="text-xs font-bold bg-candyPink text-white px-2.5 py-1 rounded-full">18 de Agosto</span>
+                            <h5 class="font-bold text-darkText font-fun">Contação de Histórias Mágicas</h5>
+                            <p class="text-xs text-gray-600">Na biblioteca da escola com fantoches e música ao vivo para todas as turmas da educação infantil.</p>
+                        </div>
+                    </div>
+                    <button onclick="alertModal('Calendário sincronizado com sucesso!')" class="w-full bg-purpleMagic text-white font-fun font-bold py-3 rounded-xl hover:bg-purple-700 transition shadow-md">
+                        <i class="fa-solid fa-bell"></i> Lembre-me dos Eventos
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mini-Games Arcade Section -->
+        <section id="jogos" class="bg-gradient-to-br from-purpleMagic/10 via-sunYellow/10 to-mintGreen/10 rounded-3xl p-8 sm:p-12 shadow-xl space-y-8 border-2 border-sunYellow/50">
+            <div class="text-center max-w-2xl mx-auto space-y-3">
+                <span class="bg-sunYellow text-darkText px-4 py-1.5 rounded-full font-bold font-fun text-sm inline-block shadow-sm">
+                    🎮 Área de Lazer & Aprendizado
+                </span>
+                <h3 class="text-3xl sm:text-5xl font-extrabold font-fun text-purpleMagic">Mini-Jogos Paulistinha</h3>
+                <p class="text-gray-700 text-lg">Escolha um jogo divertido abaixo para testar sua memória, raciocínio e se divertir muito!</p>
+            </div>
+
+            <!-- Game Tabs Selector -->
+            <div class="flex flex-wrap justify-center gap-3">
+                <button onclick="switchGame('memory')" id="btnMemory" class="bg-purpleMagic text-white font-fun font-bold px-6 py-3 rounded-2xl shadow-md transition flex items-center gap-2 text-lg cursor-pointer">
+                    <i class="fa-solid fa-brain"></i> Jogo da Memória
+                </button>
+                <button onclick="switchGame('quiz')" id="btnQuiz" class="bg-white text-darkText font-fun font-bold px-6 py-3 rounded-2xl shadow-md transition flex items-center gap-2 text-lg hover:bg-gray-100 cursor-pointer">
+                    <i class="fa-solid fa-lightbulb"></i> Quiz Saudável
+                </button>
+                <button onclick="switchGame('colors')" id="btnColors" class="bg-white text-darkText font-fun font-bold px-6 py-3 rounded-2xl shadow-md transition flex items-center gap-2 text-lg hover:bg-gray-100 cursor-pointer">
+                    <i class="fa-solid fa-palette"></i> Adivinhe a Cor
+                </button>
+            </div>
+
+            <!-- Game Containers -->
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-xl min-h-[380px] flex flex-col items-center justify-center relative">
+                
+                <!-- GAME 1: MEMORY GAME -->
+                <div id="gameMemory" class="w-full max-w-xl space-y-6 text-center">
+                    <div class="flex justify-between items-center px-4">
+                        <span class="font-fun font-bold text-lg text-purpleMagic">Encontre os Pares de Animais!</span>
+                        <span id="memoryScore" class="bg-skyBlue/20 text-skyBlue font-bold px-4 py-1.5 rounded-full text-sm">Pares: 0 / 4</span>
+                    </div>
+                    <div id="memoryBoard" class="grid grid-cols-4 gap-3 sm:gap-4">
+                        <!-- Generated via JS -->
+                    </div>
+                    <button onclick="initMemoryGame()" class="bg-sunYellow text-darkText font-fun font-bold px-6 py-2.5 rounded-xl hover:bg-yellow-400 transition shadow-sm">
+                        <i class="fa-solid fa-rotate-right"></i> Reiniciar Jogo
+                    </button>
+                </div>
+
+                <!-- GAME 2: QUIZ SAUDÁVEL -->
+                <div id="gameQuiz" class="w-full max-w-xl space-y-6 hidden text-center">
+                    <div class="space-y-2">
+                        <span id="quizProgress" class="text-xs font-bold bg-mintGreen/20 text-mintGreen px-3 py-1 rounded-full">Pergunta 1 de 3</span>
+                        <h4 id="quizQuestion" class="text-xl sm:text-2xl font-bold font-fun text-darkText pt-2">Qual destes alimentos nos dá muita energia e faz bem para a saúde?</h4>
+                    </div>
+                    <div id="quizOptions" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Options generated by JS -->
+                    </div>
+                    <div id="quizFeedback" class="text-lg font-bold font-fun min-h-[30px]"></div>
+                </div>
+
+                <!-- GAME 3: COLOR GUESS -->
+                <div id="gameColors" class="w-full max-w-xl space-y-6 hidden text-center">
+                    <div class="space-y-2">
+                        <h4 class="font-fun font-bold text-xl text-purpleMagic">Qual é a cor que aparece abaixo?</h4>
+                        <div id="colorBox" class="w-32 h-32 mx-auto rounded-3xl shadow-lg transition-transform transform hover:scale-105 border-4 border-white"></div>
+                    </div>
+                    <div id="colorOptions" class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <!-- Color buttons generated by JS -->
+                    </div>
+                    <div id="colorFeedback" class="text-lg font-bold font-fun min-h-[30px]"></div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Contact & Location Section -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-white rounded-3xl p-8 shadow-xl space-y-6 flex flex-col justify-between">
+                <div class="space-y-4">
+                    <h3 class="text-2xl font-extrabold font-fun text-purpleMagic flex items-center gap-2">
+                        <i class="fa-solid fa-location-dot text-candyPink"></i> Onde Estamos
+                    </h3>
+                    <p class="text-gray-600">Venha nos fazer uma visita! Nossa escola está de portas abertas para receber você e sua família.</p>
+                    <div class="space-y-3 text-sm font-medium text-darkText">
+                        <p class="flex items-center gap-3"><i class="fa-solid fa-map-pin text-skyBlue text-lg"></i> Campus da UNIFESP - São Paulo, SP</p>
+                        <p class="flex items-center gap-3"><i class="fa-solid fa-phone text-mintGreen text-lg"></i> (11) 5576-4000 / Ramal Paulistinha</p>
+                        <p class="flex items-center gap-3"><i class="fa-solid fa-envelope text-sunYellow text-lg"></i> contato@neipaulistinha.edu.br</p>
+                    </div>
+                </div>
+                <div class="bg-skyBlue/10 p-4 rounded-2xl flex items-center gap-4">
+                    <div class="text-3xl">🚌</div>
+                    <div class="text-xs text-gray-600">
+                        <strong class="text-darkText block text-sm font-fun">Acesso Facilitado</strong>
+                        Próximo às principais linhas de metrô e com rampa de acessibilidade total na entrada principal.
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-purpleMagic to-skyBlue rounded-3xl p-8 shadow-xl text-white flex flex-col justify-between space-y-6">
+                <div class="space-y-4">
+                    <h3 class="text-2xl font-extrabold font-fun flex items-center gap-2">
+                        <i class="fa-solid fa-comment-smile text-sunYellow"></i> Fale Conosco
+                    </h3>
+                    <p class="text-white/90">Tem alguma dúvida ou sugestão para o nosso projeto escolar? Envie uma mensagem rápida!</p>
+                </div>
+                <form onsubmit="handleFormSubmit(event)" class="space-y-4">
+                    <input type="text" placeholder="Seu Nome / Responsável" required class="w-full px-4 py-3 rounded-2xl bg-white/25 placeholder-white/70 text-white border border-white/30 focus:outline-none focus:bg-white/30">
+                    <input type="email" placeholder="Seu E-mail" required class="w-full px-4 py-3 rounded-2xl bg-white/25 placeholder-white/70 text-white border border-white/30 focus:outline-none focus:bg-white/30">
+                    <textarea rows="3" placeholder="Sua mensagem ou sugestão..." required class="w-full px-4 py-3 rounded-2xl bg-white/25 placeholder-white/70 text-white border border-white/30 focus:outline-none focus:bg-white/30"></textarea>
+                    <button type="submit" class="w-full bg-sunYellow text-darkText font-fun font-bold py-3 rounded-2xl hover:bg-yellow-400 transition shadow-lg text-lg">
+                        Enviar Mensagem 🚀
+                    </button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer with Student Credit -->
+    <footer class="bg-darkText text-white mt-16 py-12 border-t-4 border-sunYellow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+            <div class="space-y-2">
+                <div class="flex items-center justify-center md:justify-start gap-3">
+                    <div class="w-10 h-10 bg-candyPink rounded-xl flex items-center justify-center text-white text-xl">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <span class="text-xl font-bold font-fun text-sunYellow">Escola NEI Paulistinha</span>
+                </div>
+                <p class="text-sm text-gray-400">Projeto Acadêmico Inovador e Inclusivo - UNIFESP</p>
+            </div>
+            
+            <div class="bg-white/10 px-6 py-4 rounded-2xl border border-white/20 text-center">
+                <p class="text-xs text-gray-300 uppercase tracking-widest font-semibold">Desenvolvido com dedicação por</p>
+                <p class="text-2xl font-extrabold font-fun text-sunYellow mt-1">Gemi</p>
+                <p class="text-xs text-mintGreen font-medium mt-0.5"><i class="fa-solid fa-code"></i> Projeto Universitário Oficial</p>
+            </div>
+
+            <div class="flex items-center gap-4 text-2xl">
+                <a href="#" class="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-xl flex items-center justify-center transition" aria-label="Facebook"><i class="fa-brands fa-facebook-f text-skyBlue"></i></a>
+                <a href="#" class="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-xl flex items-center justify-center transition" aria-label="Instagram"><i class="fa-brands fa-instagram text-candyPink"></i></a>
+                <a href="#" class="w-10 h-10 bg-white/10 hover:bg-white/20 rounded-xl flex items-center justify-center transition" aria-label="YouTube"><i class="fa-brands fa-youtube text-red-500"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive JavaScript -->
+    <script>
+        let highContrast = false;
+        let currentFontSize = 16;
+
+        function toggleHighContrast() {
+            highContrast = !highContrast;
+            if (highContrast) {
+                document.body.classList.remove('bg-skyBlue/10', 'text-darkText');
+                document.body.classList.add('bg-black', 'text-yellow-300');
+                document.querySelectorAll('.bg-white').forEach(el => {
+                    el.style.backgroundColor = '#1a1a1a';
+                    el.style.color = '#fff';
+                    el.style.borderColor = '#FFD166';
+                });
+            } else {
+                location.reload();
+            }
+        }
+
+        function changeFontSize(direction) {
+            currentFontSize += direction * 2;
+            if (currentFontSize < 14) currentFontSize = 14;
+            if (currentFontSize > 22) currentFontSize = 22;
+            document.body.style.fontSize = currentFontSize + 'px';
+        }
+
+        function speakWelcome() {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance("Bem-vindo ao portal mágico da Escola Nei Paulistinha! Navegue pelo cardápio, divirta-se nos jogos e confira nossos avisos.");
+                utterance.lang = 'pt-BR';
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alertModal("Seu navegador não suporta leitura em voz alta.");
+            }
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        function alertModal(msg) {
+            alert(msg);
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            alertModal("Mensagem enviada com sucesso! A direção da escola agradece o contato.");
+            e.target.reset();
+        }
+
+        function switchGame(gameId) {
+            document.getElementById('gameMemory').classList.add('hidden');
+            document.getElementById('gameQuiz').classList.add('hidden');
+            document.getElementById('gameColors').classList.add('hidden');
+
+            document.getElementById('btnMemory').className = "bg-white text-darkText font-fun font-bold px-6 py-3 rounded-2xl shadow-md transition flex items-center gap-2 text-lg hover:bg-gray-100 cursor-pointer";
+            document.getElementById('btnQuiz').className = "bg-white text-darkText font-fun font-bold px-6 py-3 rounded-2xl shadow-md transition flex items-center gap-2 text-lg hover:bg-gray-100 cursor-pointer";
+            document.getElementById('btnColors').className = "bg-white text-darkText font-fun font-bold px-6 py-3 rounded-2xl shadow-md transition flex items-center gap-2 text-lg hover:bg-gray-100 cursor-pointer";
+
+            if (gameId === 'memory') {
+                document.getElementById('gameMemory').classList.remove('hidden');
+                document.getElementById('btnMemory').className = "bg-purpleMagic text-white font-fun font-bold px-6 py-3 rounded-2xl shadow-md transition flex items-center gap-2 text-lg cursor-pointer";
+                initMemoryGame();
+            } else if (gameId === 'quiz') {
+                document.getElementById('gameQuiz').classList.remove('hidden');
+                document.getElementById('btnQuiz').className = "bg-mintGreen text-white font-fun font-bold px-6 py-3 rounded-2xl shadow-md transition flex items-center gap-2 text-lg cursor-pointer";
+                initQuizGame();
+            } else if (gameId === 'colors') {
+                document.getElementById('gameColors').classList.remove('hidden');
+                document.getElementById('btnColors').className = "bg-sunYellow text-darkText font-fun font-bold px-6 py-3 rounded-2xl shadow-md transition flex items-center gap-2 text-lg cursor-pointer";
+                initColorGame();
+            }
+        }
+
+        // Memory Game Script
+        const memoryIcons = ['🐶', '🐱', '🐰', '🐼'];
+        let memoryCards = [];
+        let flippedCards = [];
+        let matchedPairs = 0;
+        let isChecking = false;
+
+        function initMemoryGame() {
+            matchedPairs = 0;
+            flippedCards = [];
+            isChecking = false;
+            document.getElementById('memoryScore').innerText = `Pares: 0 / 4`;
+            
+            memoryCards = [...memoryIcons, ...memoryIcons]
+                .sort(() => Math.random() - 0.5)
+                .map((icon, index) => ({ id: index, icon, flipped: false, matched: false }));
+            
+            renderMemoryBoard();
+        }
+
+        function renderMemoryBoard() {
+            const board = document.getElementById('memoryBoard');
+            board.innerHTML = '';
+            memoryCards.forEach((card, idx) => {
+                const btn = document.createElement('button');
+                btn.className = `h-20 rounded-2xl text-3xl flex items-center justify-center font-bold transition-all duration-300 shadow-md ${card.flipped || card.matched ? 'bg-white border-2 border-purpleMagic text-darkText' : 'bg-purpleMagic text-purpleMagic hover:bg-purple-600'}`;
+                btn.innerHTML = card.flipped || card.matched ? card.icon : '<i class="fa-solid fa-question text-white"></i>';
+                btn.onclick = () => flipMemoryCard(idx);
+                board.appendChild(btn);
+            });
+        }
+
+        function flipMemoryCard(idx) {
+            if (isChecking || memoryCards[idx].flipped || memoryCards[idx].matched) return;
+            
+            memoryCards[idx].flipped = true;
+            flippedCards.push(idx);
+            renderMemoryBoard();
+
+            if (flippedCards.length === 2) {
+                isChecking = true;
+                const [firstIdx, secondIdx] = flippedCards;
+                if (memoryCards[firstIdx].icon === memoryCards[secondIdx].icon) {
+                    memoryCards[firstIdx].matched = true;
+                    memoryCards[secondIdx].matched = true;
+                    matchedPairs++;
+                    document.getElementById('memoryScore').innerText = `Pares: ${matchedPairs} / 4`;
+                    flippedCards = [];
+                    isChecking = false;
+                    if (matchedPairs === 4) {
+                        setTimeout(() => alertModal("Parabéns! Você encontrou todos os pares com sucesso! 🎉"), 300);
+                    }
+                } else {
+                    setTimeout(() => {
+                        memoryCards[firstIdx].flipped = false;
+                        memoryCards[secondIdx].flipped = false;
+                        flippedCards = [];
+                        isChecking = false;
+                        renderMemoryBoard();
+                    }, 800);
+                }
+            }
+        }
+
+        // Quiz Game Script
+        const quizData = [
+            {
+                question: "Qual destes alimentos nos dá muita energia e faz bem para a saúde?",
+                options: ["Maçã Vermelha 🍎", "Refrigerante 🥤", "Bala doce 🍬", "Salgadinho industrializado 🍟"],
+                correct: 0
+            },
+            {
+                question: "O que devemos fazer antes de comer nossas refeições?",
+                options: ["Correr no quintal", "Lavar bem as mãos com água e sabão 🧼", "Dormir", "Assistir TV"],
+                correct: 1
+            },
+            {
+                question: "Quantos copos de água devemos beber aproximadamente por dia?",
+                options: ["Nenhum", "Apenas 1", "Vários copos para nos hidratar 💧", "Só refrigerante"],
+                correct: 2
+            }
+        ];
+        let currentQuizIndex = 0;
+
+        function initQuizGame() {
+            currentQuizIndex = 0;
+            loadQuizQuestion();
+        }
+
+        function loadQuizQuestion() {
+            const q = quizData[currentQuizIndex];
+            document.getElementById('quizProgress').innerText = `Pergunta ${currentQuizIndex + 1} de ${quizData.length}`;
+            document.getElementById('quizQuestion').innerText = q.question;
+            document.getElementById('quizFeedback').innerText = '';
+
+            const optionsContainer = document.getElementById('quizOptions');
+            optionsContainer.innerHTML = '';
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "p-4 bg-skyBlue/10 hover:bg-skyBlue/20 border-2 border-skyBlue/30 rounded-2xl font-bold font-fun text-darkText transition text-left flex items-center justify-between";
+                btn.innerHTML = `<span>${opt}</span> <i class="fa-solid fa-chevron-right text-skyBlue"></i>`;
+                btn.onclick = () => checkQuizAnswer(idx);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkQuizAnswer(selectedIdx) {
+            const q = quizData[currentQuizIndex];
+            const feedback = document.getElementById('quizFeedback');
+            if (selectedIdx === q.correct) {
+                feedback.className = "text-lg font-bold font-fun text-mintGreen";
+                feedback.innerText = "✨ Resposta Correta! Muito bem!";
+                setTimeout(() => {
+                    currentQuizIndex++;
+                    if (currentQuizIndex < quizData.length) {
+                        loadQuizQuestion();
+                    } else {
+                        feedback.innerText = "🏆 Parabéns! Você completou o Quiz Saudável com sucesso!";
+                        document.getElementById('quizOptions').innerHTML = `<button onclick="initQuizGame()" class="col-span-2 bg-sunYellow text-darkTrust font-fun font-bold py-3 rounded-xl">Jogar Novamente</button>`;
+                    }
+                }, 1200);
+            } else {
+                feedback.className = "text-lg font-bold font-fun text-candyPink";
+                feedback.innerText = "❌ Quase lá! Tente novamente.";
+            }
+        }
+
+        // Color Guess Game Script
+        const colorsList = [
+            { name: "Amarelo Sol", bg: "#FFD166" },
+            { name: "Azul Céu", bg: "#4EA8DE" },
+            { name: "Verde Menta", bg: "#06D6A0" },
+            { name: "Rosa Doce", bg: "#FF6B6B" }
+        ];
+        let targetColor = {};
+
+        function initColorGame() {
+            targetColor = colorsList[Math.floor(Math.random() * colorsList.length)];
+            document.getElementById('colorBox').style.backgroundColor = targetColor.bg;
+            document.getElementById('colorFeedback').innerText = '';
+
+            const optionsContainer = document.getElementById('colorOptions');
+            optionsContainer.innerHTML = '';
+            
+            // Shuffle colors
+            const shuffled = [...colorsList].sort(() => Math.random() - 0.5);
+            shuffled.forEach(c => {
+                const btn = document.createElement('button');
+                btn.className = "p-4 rounded-2xl font-fun font-bold text-white shadow-md transition transform hover:scale-105";
+                btn.style.backgroundColor = c.bg;
+                btn.innerText = c.name;
+                btn.onclick = () => checkColorGuess(c.name);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkColorGuess(selectedName) {
+            const feedback = document.getElementById('colorFeedback');
+            if (selectedName === targetColor.name) {
+                feedback.className = "text-lg font-bold font-fun text-mintGreen";
+                feedback.innerText = "🎉 Acertou! Que ótima visão!";
+                setTimeout(initColorGame, 1500);
+            } else {
+                feedback.className = "text-lg font-bold font-fun text-candyPink";
+                feedback.innerText = "❌ Ops! Tente adivinhar de novo.";
+            }
+        }
+
+        // Initialize memory game on load
+        window.onload = function() {
+            initMemoryGame();
+        };
+    </script>
+</body>
+</html>
